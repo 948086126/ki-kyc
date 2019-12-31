@@ -1,0 +1,15 @@
+chaincode/hyperledger/
+chaincode/fabcar
+chaincode/underlying/node_modules
+test.js
+server/config/*
+server/crypto/*
+server/data/*
+.idea
+ca/fabric-ca-client
+server/fabric-ca-client
+server/crypto-config
+server/data
+server/data
+new/
+
