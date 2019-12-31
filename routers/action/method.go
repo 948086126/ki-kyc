@@ -17,8 +17,9 @@ func initRouter() *g.Engine {
 
 	{
 		Test.POST("/getCert", Kiapi.GenerateRSAKey)
-		Test.POST("/getCert2", Kiapi.GenerateRSAKey)
-		Test.POST("/getCert3", Kiapi.GenerateRSAKey)
+		Test.POST("/getCert2", Kiapi.GenerateRSAKeyforPem)
+		Test.POST("/jiami", Kiapi.Encryption)
+		Test.POST("/jiemi", Kiapi.GenerateRSAKey)
 	}
 
 	//
