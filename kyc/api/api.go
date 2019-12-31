@@ -2,7 +2,7 @@ package api
 
 import (
 	"crypto/rsa"
-	"ki-kyc/action"
+	"ki-kyc/kyc/action"
 )
 
 // 获取公钥私钥
