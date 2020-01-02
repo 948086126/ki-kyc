@@ -12,4 +12,5 @@ server/crypto-config
 server/data
 server/data
 new/
+*.pem
 
