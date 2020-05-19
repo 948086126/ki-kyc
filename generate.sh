@@ -3,10 +3,10 @@
 ### 参数
 
 ## 通道名称
-CHANNEL_NAME="mychannel"
+CHANNEL_NAME="bookchannel"
 
 ## 生成创世块配置文件
-configtxgen -profile newpowerMultiNodeEtcdRaft   -outputBlock  ./channel-artifacts/genesis.block
+configtxgen -profile bookstoreMultiNodeEtcdRaft   -channelID testchainid  -outputBlock  ./channel-artifacts/genesis.block
 if [ "$?" -ne 0 ]; then
   echo "Failed to generate orderer genesis block..."
   exit 1
