@@ -1,0 +1,11 @@
+{
+  "name": "xnchain",
+  "version": "1.0.0",
+  "fabric_version": "1.4.2",
+  "go_version": "zhichi go mod",
+  "channel_name": "mychannel",
+  "chaincode_name": "newpower",
+  "dependencies": {
+    
+  }
+}
