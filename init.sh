@@ -59,7 +59,7 @@ CLI_CLIENT="cli"
 TLS="true"
 
 ## channel-artifacts
-CHANNEL_ARTIFACTS="./channel-artifacts/mychannel.tx"
+CHANNEL_ARTIFACTS="./channel-artifacts/"
 
 ### PEER 
 CORE_PEER_LOCALMSPID="Org1MSP"
@@ -158,7 +158,7 @@ channel_create() {
         peer channel create \
                     -o $ORDERER1_ADDRESS \
                     -c $CHANNEL_NAME \
-                    -f $CHANNEL_ARTIFACTS \
+                    -f $CHANNEL_ARTIFACTS$CHANNEL_NAME.tx \
                     --tls true \
                     --cafile  $ORDERER_CAFILE
 
