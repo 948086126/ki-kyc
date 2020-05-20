@@ -68,6 +68,7 @@ type Use struct {
 //	链码||函数方法
 const (
 	uploadAsset          string = "uploadAsset"
+	test         		 string = "test"
 	uploadAsset_v1       string = "uploadAsset_v1"
 	updateAsset          string = "updateAsset"
 	getAssetByID         string = "getAssetByID"
