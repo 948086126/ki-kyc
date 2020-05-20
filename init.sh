@@ -5,7 +5,7 @@
 ## 链码名称
 GO_CC_NAME=("bookstorechain")
 ## 链码路径
-GO_CC_SRC_PATH=("github.com/chaincode/ch-dl-v4")
+GO_CC_SRC_PATH=("github.com/chaincode/ch-wei-main/main")
 ## 链码语言
 CC_GOLANG="golang"
 ## 链码版本
