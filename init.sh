@@ -78,10 +78,10 @@ CORE_PEER_TLS_KEY_FILE="/opt/gopath/src/github.com/hyperledger/fabric/peer/crypt
 CORE_PEER_TLS_ROOTCERT_FILE="/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.bookstore.com/peers/peer0.org1.bookstore.com/tls/ca.crt"
 
 ##  org1 org2
-ORG1_CAT="/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.newpower.com/peers/peer0.org1.newpower.com/tls/ca.crt"
+ORG1_CAT="/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.bookstore.com/peers/peer0.org1.bookstore.com/tls/ca.crt"
 
 ## org2 
-ORG2_CAT="/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.newpower.com/peers/peer0.org2.newpower.com/tls/ca.crt"
+ORG2_CAT="/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.bookstore.com/peers/peer0.org2.bookstore.com/tls/ca.crt"
 
 ## 工具函数
 get_mspid() {
@@ -243,9 +243,9 @@ chaincode_instantiate() {
     local org=$2
     local peer=$3
     local port=$4
-    local cc_name=$9
-    local cc_src_path=${10}
-    local lang=${11}
+    local cc_name=$5
+    local cc_src_path=$6
+    local lang=$7
 
     docker exec \
         -e "CORE_PEER_LOCALMSPID=$(get_mspid $org)" \
