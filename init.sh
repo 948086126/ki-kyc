@@ -5,13 +5,13 @@
 ## 链码名称
 GO_CC_NAME=("bookstorechain")
 ## 链码路径
-GO_CC_SRC_PATH=("github.com/chaincode/bookstore")
+GO_CC_SRC_PATH=("github.com/chaincode/book")
 ## 链码语言
 CC_GOLANG="golang"
 ## 链码版本
 CC_VERSION="1.0"
 ## 通道名称
-CHANNEL_NAME="bookchain"
+CHANNEL_NAME="bookchannel"
 
 ## 拼接参数
 DOMAIN_NAME="bookstore.com"

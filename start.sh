@@ -13,7 +13,7 @@ cryptogen generate --config=./crypto-config.yaml
 ./init.sh
 
 # 实例化链码
-./install.sh
+# ./install.sh
 
 
 
