@@ -41,7 +41,7 @@ SERVER_CA="ca.crt"
 DOCKER_YAML="docker-compose-etcdraft2.yaml"
 
 ## cmd
-CMD='{"Args":["test"]}'
+CMD='{"Args":["test","abc"]}'
 
 ## tls +
 TLS_PATH="/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/"
@@ -289,16 +289,30 @@ chaincode_invoke() {
         -e "CORE_PEER_TLS_ROOTCERT_FILE=$(get_peer_tls_cert $org $peer $SERVER_CA)"\
         $CLI_CLIENT \
         peer chaincode invoke \
-                -o $ORDERER1_ADDRESS \
-                --tls $TLS \
-                --cafile  $ORDERER_CAFILE \
-                -C $channel \
-                -n $cc_name \
-                --peerAddresses $ORG1_ADDRESS \
-                --tlsRootCertFiles $ORG1_CAT \
-                --peerAddresses $ORG2_ADDRESS \
-                --tlsRootCertFiles $ORG2_CAT \
-                -c $cmd
+                -o orderer1.bookstore.com:7050 \
+                --tls true \
+                --cafile  /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/bookstore.com/orderers/orderer1.bookstore.com/msp/tlscacerts/tlsca.bookstore.com-cert.pem \
+                -C bookchannel \
+                -n bookstorechain \
+                --peerAddresses peer0.org1.bookstore.com:7051 \
+                --tlsRootCertFiles /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.bookstore.com/peers/peer0.org1.bookstore.com/tls/ca.crt \
+                --peerAddresses peer0.org2.bookstore.com:9051 \
+                --tlsRootCertFiles /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.bookstore.com/peers/peer0.org2.bookstore.com/tls/ca.crt \
+                -c '{"Args":["test","abc"]}'
+
+        # $CLI_CLIENT \
+        # peer chaincode invoke \
+        #         -o $ORDERER1_ADDRESS \
+        #         --tls $TLS \
+        #         --cafile  $ORDERER_CAFILE \
+        #         -C $channel \
+        #         -n $cc_name \
+        #         --peerAddresses $ORG1_ADDRESS \
+        #         --tlsRootCertFiles $ORG1_CAT \
+        #         --peerAddresses $ORG2_ADDRESS \
+        #         --tlsRootCertFiles $ORG2_CAT \
+        #         -c $cmd
+
         # peer chaincode invoke -o orderer1.bookstore.com:7050 --tls true --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/bookstore.com/orderers/orderer1.bookstore.com/msp/tlscacerts/tlsca.bookstore.com-cert.pem -C bookchannel -n bookstorechain --peerAddresses peer0.org1.bookstore.com:7051 --tlsRootCertFiles /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.bookstore.com/peers/peer0.org1.bookstore.com/tls/ca.crt --peerAddresses peer0.org2.bookstore.com:9051 --tlsRootCertFiles /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.bookstore.com/peers/peer0.org2.bookstore.com/tls/ca.crt -c '{"Args":["init"]}'
      echo "***********************************************************************"
      echo "*******************$cc_name invoke chaincode  successful***************"
