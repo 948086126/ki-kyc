@@ -203,7 +203,7 @@ install_and_instantiate() {
 
     chaincode_instantiate  $CHANNEL_NAME "org1" "peer0" "7051"  ${cc_name[0]} ${cc_src_path[0]} $lang 
 
-    sleep 5
+    sleep 60
    
     chaincode_invoke $CHANNEL_NAME "org1"  "peer0" "7051"  ${cc_name[0]}  $CMD
 }
@@ -274,16 +274,16 @@ chaincode_instantiate() {
 chaincode_invoke() {
 
     local channel=$1
-    local org1=$2
+    local org=$2
     local peer=$3
     local port=$4
     local cc_name=$5
     local cmd=$6
 
     docker exec \
-        -e "CORE_PEER_LOCALMSPID=$(get_mspid $org1)" \
-        -e "CORE_PEER_MSPCONFIGPATH=$(get_msp_channel-artifacts_path $org1 $peer)" \
-        -e "CORE_PEER_ADDRESS=$(get_peer_address $org1 $peer $port)" \
+        -e "CORE_PEER_LOCALMSPID=$(get_mspid $org)" \
+        -e "CORE_PEER_MSPCONFIGPATH=$(get_msp_channel-artifacts_path $org $peer)" \
+        -e "CORE_PEER_ADDRESS=$(get_peer_address $org $peer $port)" \
         -e "CORE_PEER_TLS_CERT_FILE=$(get_peer_tls_cert $org $peer $SERVER_CRT)"\
         -e "CORE_PEER_TLS_KEY_FILE=$(get_peer_tls_cert $org $peer $SERVER_KEY)"\
         -e "CORE_PEER_TLS_ROOTCERT_FILE=$(get_peer_tls_cert $org $peer $SERVER_CA)"\
