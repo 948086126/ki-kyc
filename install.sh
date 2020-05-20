@@ -3,9 +3,9 @@
 ###  参数 ------------------------------------------------------
 
 ## 链码名称
-GO_CC_NAME=("newpower")
+GO_CC_NAME=("bookstorechain")
 ## 链码路径
-GO_CC_SRC_PATH=("github.com/chaincode/npchain_chaincode")
+GO_CC_SRC_PATH=("github.com/chaincode/book")
 ## 链码版本
 CC_VERSION="1.0"
 
@@ -16,20 +16,20 @@ TLS="true"
 ## 链码语言
 CC_GOLANG="golang"
 ## 通道名称
-CHANNEL_NAME="mychannel"
-DOMAIN_NAME="newpower.com"
-orderer1_ADDRESS="orderer1.newpower.com:7050"
-ORG1_ADDRESS="peer0.org1.newpower.com:7051"
-ORG2_ADDRESS="peer0.org2.newpower.com:9051"
+CHANNEL_NAME="bookchannel"
+DOMAIN_NAME="bookstore.com"
+orderer1_ADDRESS="orderer1.bookstore.com:7050"
+ORG1_ADDRESS="peer0.org1.bookstore.com:7051"
+ORG2_ADDRESS="peer0.org2.bookstore.com:9051"
 
 ORG_NAME=("org1" "org2")
 TLS_PATH="/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/"
 ORDERER_TLS_PATH="/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/"
-ORDERER_CAFILE="/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/newpower.com/orderers/orderer1.newpower.com/msp/tlscacerts/tlsca.newpower.com-cert.pem"
+ORDERER_CAFILE="/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/bookstore.com/orderers/orderer1.bookstore.com/msp/tlscacerts/tlsca.bookstore.com-cert.pem"
 
 ##  org1 org2
-ORG1_CAT="/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.newpower.com/peers/peer0.org1.newpower.com/tls/ca.crt"
-ORG2_CAT="/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.newpower.com/peers/peer0.org2.newpower.com/tls/ca.crt"
+ORG1_CAT="/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.bookstore.com/peers/peer0.org1.bookstore.com/tls/ca.crt"
+ORG2_CAT="/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.bookstore.com/peers/peer0.org2.bookstore.com/tls/ca.crt"
 
 ## 工具函数
 get_mspid() {
@@ -63,7 +63,7 @@ get_msp_channel-artifacts_path() {
         exit 1
     fi
 
-    echo "${TLS_PATH}peerOrganizations/$org.newpower.com/users/Admin@$org.newpower.com/msp"
+    echo "${TLS_PATH}peerOrganizations/$org.bookstore.com/users/Admin@$org.bookstore.com/msp"
 
 }
 
@@ -88,7 +88,7 @@ get_peer_tls_cert(){
         exit 1
     fi
 
-    echo "${TLS_PATH}peerOrganizations/${org}.newpower.com/peers/${peer}.${org}.newpower.com/tls/$type"
+    echo "${TLS_PATH}peerOrganizations/${org}.bookstore.com/peers/${peer}.${org}.bookstore.com/tls/$type"
 
 }
 
@@ -105,11 +105,11 @@ channel_create() {
 
     docker exec \
         -e "CORE_PEER_LOCALMSPID=Org1MSP" \
-        -e "CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.newpower.com/users/Admin@org1.newpower.com/msp" \
-        -e "CORE_PEER_ADDRESS=peer0.org1.newpower.com:7051" \
-        -e "CORE_PEER_TLS_CERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.newpower.com/peers/peer0.org1.newpower.com/tls/server.crt" \
-        -e "CORE_PEER_TLS_KEY_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.newpower.com/peers/peer0.org1.newpower.com/tls/server.key" \
-        -e "CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.newpower.com/peers/peer0.org1.newpower.com/tls/ca.crt" \
+        -e "CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.bookstore.com/users/Admin@org1.bookstore.com/msp" \
+        -e "CORE_PEER_ADDRESS=peer0.org1.bookstore.com:7051" \
+        -e "CORE_PEER_TLS_CERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.bookstore.com/peers/peer0.org1.bookstore.com/tls/server.crt" \
+        -e "CORE_PEER_TLS_KEY_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.bookstore.com/peers/peer0.org1.bookstore.com/tls/server.key" \
+        -e "CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.bookstore.com/peers/peer0.org1.bookstore.com/tls/ca.crt" \
         cli \
         peer channel create \
                     -o $orderer1_ADDRESS \
