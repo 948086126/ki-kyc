@@ -319,7 +319,7 @@ echo
 
 ## 启动容器
 docker-compose -f  \
-     $DOCKER_YAML up -d
+     $DOCKER_YAML  -p neet up -d
 
 sleep 5
 
