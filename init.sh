@@ -41,7 +41,7 @@ SERVER_CA="ca.crt"
 DOCKER_YAML="docker-compose-etcdraft2.yaml"
 
 ## cmd
-CMD='{"Args":["init"]}'
+CMD='{"Args":["test"]}'
 
 ## tls +
 TLS_PATH="/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/"
