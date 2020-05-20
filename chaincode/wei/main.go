@@ -14,14 +14,14 @@ const (
 	TxId string = "txid-"
 )
 
-type FinanceList struct {
+type BookList struct {
 	TxId  string `json:"txid"`  //txid
 	Value []byte `json:"value"` //value
 }
-type FinanceChaincode struct {
+type Book struct {
 }
 
-type Finance struct {
+type Book struct {
 	LoginId       string `json:"loginid"`
 	UserId        string `json:"userid"`
 	UserName      string `json:"username"`
@@ -38,21 +38,21 @@ type Finance struct {
 	LoginLocation string `json:"loginlocation"`
 }
 
-type ResInfo struct {
+type BookInfo struct {
 	Status bool   `json:"status"`
 	Msg    string `json:"msg"`
 }
 
-func (t *ResInfo) error(msg string) {
+func (t *BookInfo) error(msg string) {
 	t.Status = false
 	t.Msg = msg
 }
-func (t *ResInfo) ok(msg string) {
+func (t *BookInfo) ok(msg string) {
 	t.Status = true
 	t.Msg = msg
 }
 
-func (t *ResInfo) response() pb.Response {
+func (t *BookInfo) response() pb.Response {
 	resJson, err := json.Marshal(t)
 	if err != nil {
 		return shim.Error("Failed to generate json result " + err.Error())
@@ -60,13 +60,13 @@ func (t *ResInfo) response() pb.Response {
 	return shim.Success(resJson)
 }
 
-type process func(shim.ChaincodeStubInterface, []string) *ResInfo
+type process func(shim.ChaincodeStubInterface, []string) *BookInfo
 
-func (t *FinanceChaincode) Init(stub shim.ChaincodeStubInterface) pb.Response {
+func (t *Book) Init(stub shim.ChaincodeStubInterface) pb.Response {
 	return shim.Success(nil)
 }
 
-func (t *FinanceChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
+func (t *Book) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 	function, args := stub.GetFunctionAndParameters()
 	fmt.Println("invoke is running " + function)
 
@@ -89,9 +89,9 @@ func (t *FinanceChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response 
 	return shim.Error("Invalid invoke function name. Expecting \"invoke\" \"delete\" \"update\" \"query\"")
 }
 
-func (t *FinanceChaincode) invoke(stub shim.ChaincodeStubInterface, args []string) pb.Response {
-	return t.handleProcess(stub, args, 14, func(shim.ChaincodeStubInterface, []string) *ResInfo {
-		ri := &ResInfo{true, ""}
+func (t *Book) invoke(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+	return t.handleProcess(stub, args, 14, func(shim.ChaincodeStubInterface, []string) *BookInfo {
+		ri := &BookInfo{true, ""}
 		_id := args[0]
 		_userid := args[1]
 		_username := args[2]
@@ -107,12 +107,12 @@ func (t *FinanceChaincode) invoke(stub shim.ChaincodeStubInterface, args []strin
 		_loginaddress := args[12]
 		_loginlocation := args[13]
 
-		_finance := &Finance{_id, _userid, _username,
+		_Book := &Book{_id, _userid, _username,
 			_fullname, _userphone, _companyid, _companyname,
 			_loginstate, _logintype, _logintime, _loginip,
 			_devicetype, _loginaddress, _loginlocation}
 
-		_ejson, err := json.Marshal(_finance)
+		_ejson, err := json.Marshal(_Book)
 
 		if err != nil {
 			ri.error(err.Error())
@@ -121,7 +121,7 @@ func (t *FinanceChaincode) invoke(stub shim.ChaincodeStubInterface, args []strin
 			if err != nil {
 				ri.error(err.Error())
 			} else if _old != nil {
-				ri.error("the finance has exists")
+				ri.error("the Book has exists")
 			} else {
 				err := stub.PutState(_id, _ejson)
 				if err != nil {
@@ -146,16 +146,16 @@ func (t *FinanceChaincode) invoke(stub shim.ChaincodeStubInterface, args []strin
 	})
 }
 
-func (t *FinanceChaincode) delete(stub shim.ChaincodeStubInterface, args []string) pb.Response {
-	return t.handleProcess(stub, args, 1, func(shim.ChaincodeStubInterface, []string) *ResInfo {
-		ri := &ResInfo{true, ""}
+func (t *Book) delete(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+	return t.handleProcess(stub, args, 1, func(shim.ChaincodeStubInterface, []string) *BookInfo {
+		ri := &BookInfo{true, ""}
 		_id := args[0]
-		_finance, err := stub.GetState(_id)
+		_Book, err := stub.GetState(_id)
 		if err != nil {
 			ri.error(err.Error())
 		} else {
-			if _finance == nil {
-				ri.ok("Warnning finance does not exists")
+			if _Book == nil {
+				ri.ok("Warnning Book does not exists")
 			} else {
 				err := stub.DelState(_id)
 				if err != nil {
@@ -169,9 +169,9 @@ func (t *FinanceChaincode) delete(stub shim.ChaincodeStubInterface, args []strin
 	})
 }
 
-func (t *FinanceChaincode) update(stub shim.ChaincodeStubInterface, args []string) pb.Response {
-	return t.handleProcess(stub, args, 7, func(shim.ChaincodeStubInterface, []string) *ResInfo {
-		ri := &ResInfo{true, ""}
+func (t *Book) update(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+	return t.handleProcess(stub, args, 7, func(shim.ChaincodeStubInterface, []string) *BookInfo {
+		ri := &BookInfo{true, ""}
 		_id := args[0]
 		_userid := args[1]
 		_username := args[2]
@@ -187,20 +187,20 @@ func (t *FinanceChaincode) update(stub shim.ChaincodeStubInterface, args []strin
 		_loginaddress := args[12]
 		_loginlocation := args[13]
 
-		newfinance := &Finance{_id, _userid, _username,
+		newBook := &Book{_id, _userid, _username,
 			_fullname, _userphone, _companyid, _companyname,
 			_loginstate, _logintype, _logintime, _loginip,
 			_devicetype, _loginaddress, _loginlocation}
 
-		_finance, err := stub.GetState(_id)
+		_Book, err := stub.GetState(_id)
 
 		if err != nil {
 			ri.error(err.Error())
 		} else {
-			if _finance == nil {
-				ri.error("Error the finance does not exists")
+			if _Book == nil {
+				ri.error("Error the Book does not exists")
 			} else {
-				_ejson, err := json.Marshal(newfinance)
+				_ejson, err := json.Marshal(newBook)
 				if err != nil {
 					ri.error(err.Error())
 				} else {
@@ -228,9 +228,9 @@ func (t *FinanceChaincode) update(stub shim.ChaincodeStubInterface, args []strin
 	})
 }
 
-func (t *FinanceChaincode) query(stub shim.ChaincodeStubInterface, args []string) pb.Response {
-	return t.handleProcess(stub, args, 1, func(shim.ChaincodeStubInterface, []string) *ResInfo {
-		ri := &ResInfo{true, ""}
+func (t *Book) query(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+	return t.handleProcess(stub, args, 1, func(shim.ChaincodeStubInterface, []string) *BookInfo {
+		ri := &BookInfo{true, ""}
 		queryString := args[0]
 
 		value, err := stub.GetState(queryString)
@@ -245,9 +245,9 @@ func (t *FinanceChaincode) query(stub shim.ChaincodeStubInterface, args []string
 	})
 }
 
-func (t *FinanceChaincode) history(stub shim.ChaincodeStubInterface, args []string) pb.Response {
-	return t.handleProcess(stub, args, 1, func(shim.ChaincodeStubInterface, []string) *ResInfo {
-		ri := &ResInfo{true, ""}
+func (t *Book) history(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+	return t.handleProcess(stub, args, 1, func(shim.ChaincodeStubInterface, []string) *BookInfo {
+		ri := &BookInfo{true, ""}
 		queryString := args[0]
 
 		queryResults, err := getHistoryForKeyStrcts(stub, queryString)
@@ -262,8 +262,8 @@ func (t *FinanceChaincode) history(stub shim.ChaincodeStubInterface, args []stri
 func getHistoryForKeyStrcts(stub shim.ChaincodeStubInterface, queryString string) ([]byte, error) {
 
 	fmt.Printf("- getQueryResultForQueryString queryString:\n%s\n", queryString)
-	var list []FinanceList
-	var row FinanceList
+	var list []BookList
+	var row BookList
 	resultsIterator, err := stub.GetHistoryForKey(queryString)
 	if err != nil {
 		return nil, err
@@ -371,8 +371,8 @@ func getQueryResultForQueryString(stub shim.ChaincodeStubInterface, queryString 
 	return buffer.Bytes(), nil
 }
 
-func (t *FinanceChaincode) handleProcess(stub shim.ChaincodeStubInterface, args []string, expectNum int, f process) pb.Response {
-	res := &ResInfo{false, ""}
+func (t *Book) handleProcess(stub shim.ChaincodeStubInterface, args []string, expectNum int, f process) pb.Response {
+	res := &BookInfo{false, ""}
 	err := t.checkArgs(args, expectNum)
 	if err != nil {
 		res.error(err.Error())
@@ -382,7 +382,7 @@ func (t *FinanceChaincode) handleProcess(stub shim.ChaincodeStubInterface, args 
 	return res.response()
 }
 
-func (t *FinanceChaincode) checkArgs(args []string, expectNum int) error {
+func (t *Book) checkArgs(args []string, expectNum int) error {
 	if len(args) != expectNum {
 		return fmt.Errorf("Incorrect number of arguments. Expecting  " + strconv.Itoa(expectNum))
 	}
@@ -394,9 +394,9 @@ func (t *FinanceChaincode) checkArgs(args []string, expectNum int) error {
 	return nil
 }
 
-func (t *FinanceChaincode) updateTxid(stub shim.ChaincodeStubInterface, args []string) pb.Response {
-	return t.handleProcess(stub, args, 2, func(shim.ChaincodeStubInterface, []string) *ResInfo {
-		ri := &ResInfo{true, ""}
+func (t *Book) updateTxid(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+	return t.handleProcess(stub, args, 2, func(shim.ChaincodeStubInterface, []string) *BookInfo {
+		ri := &BookInfo{true, ""}
 		_id := args[0]
 		_txid := args[1]
 		err := stub.PutState(TxId+_id, []byte(_txid))
@@ -409,9 +409,9 @@ func (t *FinanceChaincode) updateTxid(stub shim.ChaincodeStubInterface, args []s
 	})
 }
 
-func (t *FinanceChaincode) test(stub shim.ChaincodeStubInterface, args []string) pb.Response {
-	return t.handleProcess(stub, args, 1, func(shim.ChaincodeStubInterface, []string) *ResInfo {
-		ri := &ResInfo{true, ""}
+func (t *Book) test(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+	return t.handleProcess(stub, args, 1, func(shim.ChaincodeStubInterface, []string) *BookInfo {
+		ri := &BookInfo{true, ""}
 
 		ri.ok("init server is ok ")
 
@@ -419,7 +419,7 @@ func (t *FinanceChaincode) test(stub shim.ChaincodeStubInterface, args []string)
 	})
 }
 func main() {
-	err := shim.Start(new(FinanceChaincode))
+	err := shim.Start(new(Book))
 	if err != nil {
 		fmt.Printf("Error starting Simple chaincode: %s", err)
 	}
