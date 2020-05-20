@@ -82,6 +82,8 @@ func (t *FinanceChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response 
 		return t.updateTxid(stub, args)
 	} else if function == "history" {
 		return t.history(stub, args)
+	}else if function =="test"{
+		return shim.Success([]byte("server is ok")
 	}
 
 	return shim.Error("Invalid invoke function name. Expecting \"invoke\" \"delete\" \"update\" \"query\"")
