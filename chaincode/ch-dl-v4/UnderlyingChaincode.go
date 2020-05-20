@@ -43,7 +43,7 @@ func (c *UnderlyingChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Respon
 	switch function {
 	// -------------------新增数据的时候 -----------------------
 	case test:
-		 return   shim.Success("test is ok ")
+		 return   shim.Success([]byte("test is ok"))
 	case uploadAsset:
 		resp = c.uploadAsset(stub, args)
 	case uploadAsset_v1:
