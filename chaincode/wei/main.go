@@ -261,8 +261,8 @@ func (t *FinanceChaincode) checkArgs(args []string, expectNum int) error {
 }
 
 func (t *FinanceChaincode) test(stub shim.ChaincodeStubInterface, args []string) pb.Response {
-	return t.handleProcess(stub, args, 1, func(shim.ChaincodeStubInterface, []string) *BookInfo {
-		ri := &BookInfo{true, ""}
+	return t.handleProcess(stub, args, 1, func(shim.ChaincodeStubInterface, []string) *ResInfo {
+		ri := &ResInfo{true, ""}
 
 		ri.ok("init server is ok ")
 
