@@ -8,8 +8,6 @@ import (
 
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 	pb "github.com/hyperledger/fabric/protos/peer"
-	//"github.com/ziggurat/zigledger/core/chaincode/shim"
-	//pb "github.com/ziggurat/zigledger/protos/peer"
 )
 
 const (
