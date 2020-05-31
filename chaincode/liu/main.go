@@ -81,6 +81,8 @@ func (a *AssetChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 			err := stub.PutState(AssetId, marshal)
 			if err != nil {
 				return shim.Error(err.Error())
+			} else {
+				return shim.Success([]byte(stub.GetTxID()))
 			}
 		} else {
 			return shim.Error("xushiliehuash")
@@ -147,9 +149,11 @@ func (a *AssetChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 				}
 			}
 		} else {
+
 		}
+
 	}
-	return shim.Error("方法异常")
+	return shim.Error("Invalid invoke function name. Expecting \"invoke\" \"delete\" \"update\" \"query\"")
 }
 
 func main() {
