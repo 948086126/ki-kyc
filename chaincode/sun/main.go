@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 	pb "github.com/hyperledger/fabric/protos/peer"
 )
@@ -71,4 +72,10 @@ func upInfoToBlock(stub shim.ChaincodeStubInterface, args []string) pb.Response 
 		}
 	}
 	return shim.Error("add error")
+}
+func main() {
+	err := shim.Start(new(GoodsChaincode))
+	if err != nil {
+		fmt.Printf("Error starting Simple chaincode: %s", err)
+	}
 }
