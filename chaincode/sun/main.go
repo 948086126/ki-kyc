@@ -36,7 +36,7 @@ func (g *GoodsChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 	if function == "upInfoToBlock" {
 		return upInfoToBlock(stub, args)
 	} else if function == "delInfoFromBlok" {
-
+		return delInfoFromBlok(stub, args)
 	}
 	return shim.Error("please check request")
 }
@@ -72,6 +72,25 @@ func upInfoToBlock(stub shim.ChaincodeStubInterface, args []string) pb.Response 
 		}
 	}
 	return shim.Error("add error")
+}
+func delInfoFromBlok(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+	_Txid := args[0]
+	state, err := stub.GetState(_Txid)
+	if err != nil {
+		return shim.Error("get Data excetion")
+	} else {
+		if state != nil {
+			err := stub.DelState(_Txid)
+			if err != nil {
+				shim.Error("del excetion")
+			} else {
+				shim.Success(nil)
+			}
+		} else {
+			shim.Error("data exit")
+		}
+	}
+	return shim.Error("del excetion final")
 }
 func main() {
 	err := shim.Start(new(GoodsChaincode))
