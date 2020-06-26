@@ -41,7 +41,12 @@ SERVER_CA="ca.crt"
 DOCKER_YAML="docker-compose-etcdraft2.yaml"
 
 ## cmd
-CMD='{"Args":["test","abc"]}'
+CMD='{
+"channelName":"bookchannel",
+"chainCodeName":"bookstorechain",
+"functionName":"invoke",
+"data":["id23xiosjodfis11113","zhangsan3","393"]
+}'
 
 ## tls +
 TLS_PATH="/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/"
