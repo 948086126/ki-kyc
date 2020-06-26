@@ -210,7 +210,7 @@ install_and_instantiate() {
 
     sleep 10
 
-    chaincode_invoke $CHANNEL_NAME "org1"  "peer0" "7051"  ${cc_name[0]}  $CMD
+    #chaincode_invoke $CHANNEL_NAME "org1"  "peer0" "7051"  ${cc_name[0]}  $CMD
 }
 
 chaincode_install() {
