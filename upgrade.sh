@@ -237,6 +237,36 @@ chaincode_install() {
      echo "***********************************************************************"
 }
 
+chaincode_upgrade() {
+    local channel=$1
+    local org=$2
+    local peer=$3
+    local port=$4
+    local cc_name=$5
+    local cc_src_path=$6
+    local lang=$7
+
+    docker exec \
+        -e "CORE_PEER_LOCALMSPID=$(get_mspid $org)" \
+        -e "CORE_PEER_MSPCONFIGPATH=$(get_msp_channel-artifacts_path $org $peer)" \
+        -e "CORE_PEER_ADDRESS=$(get_peer_address $org $peer $port)" \
+        -e "CORE_PEER_TLS_CERT_FILE=$(get_peer_tls_cert $org $peer $SERVER_CRT)"\
+        -e "CORE_PEER_TLS_KEY_FILE=$(get_peer_tls_cert $org $peer $SERVER_KEY)"\
+        -e "CORE_PEER_TLS_ROOTCERT_FILE=$(get_peer_tls_cert $org $peer $SERVER_CA)"\
+        $CLI_CLIENT \
+        peer chaincode upgrade  \
+        -o $ORDERER0_ADDRESS \
+        --tls true \
+        --cafile $ORDERER_CAFILE \
+        -C $CHANNEL_NAME \
+        -n $cc_name \
+        -l golang \
+        -v $CC_VERSION \
+        -c '{"Args":[""]}' \
+        -P 'OR ('\''Org1MSP.member'\'','\''Org2MSP.member'\'')'
+
+     echo "*******************************init chaincode is successful*********************************"
+}
 chaincode_instantiate() {
 
     local channel=$1
@@ -356,34 +386,3 @@ echo "|  _|   |  \| | | | | | "
 echo "| |___  | |\  | | |_| | "
 echo "|_____| |_| \_| |____/  "
 echo
-
-chaincode_upgrade() {
-    local channel=$1
-    local org=$2
-    local peer=$3
-    local port=$4
-    local cc_name=$5
-    local cc_src_path=$6
-    local lang=$7
-
-    docker exec \
-        -e "CORE_PEER_LOCALMSPID=$(get_mspid $org)" \
-        -e "CORE_PEER_MSPCONFIGPATH=$(get_msp_channel-artifacts_path $org $peer)" \
-        -e "CORE_PEER_ADDRESS=$(get_peer_address $org $peer $port)" \
-        -e "CORE_PEER_TLS_CERT_FILE=$(get_peer_tls_cert $org $peer $SERVER_CRT)"\
-        -e "CORE_PEER_TLS_KEY_FILE=$(get_peer_tls_cert $org $peer $SERVER_KEY)"\
-        -e "CORE_PEER_TLS_ROOTCERT_FILE=$(get_peer_tls_cert $org $peer $SERVER_CA)"\
-        $CLI_CLIENT \
-        peer chaincode upgrade  \
-        -o $ORDERER0_ADDRESS \
-        --tls true \
-        --cafile $ORDERER_CAFILE \
-        -C $CHANNEL_NAME \
-        -n $cc_name \
-        -l golang \
-        -v $CC_VERSION \
-        -c '{"Args":[""]}' \
-        -P 'OR ('\''Org1MSP.member'\'','\''Org2MSP.member'\'')'
-
-     echo "*******************************init chaincode is successful*********************************"
-}
