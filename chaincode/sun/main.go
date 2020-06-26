@@ -49,7 +49,7 @@ func (g *GoodsChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 	} else if function == "delInfoFromBlok" {
 		return delInfoFromBlok(stub, args)
 	} else if function == "queryBlock" {
-		return testHistoryQuery(stub, args)
+		return testHistoryQuery1(stub, args)
 	}
 	return shim.Error("please check request")
 }
@@ -76,8 +76,11 @@ func upInfoToBlock(stub shim.ChaincodeStubInterface, args []string) pb.Response 
 	if err2 != nil {
 		return shim.Error(err2.Error())
 	} else {
-		stub.PutState(_Txid, requestInfo)
-		return shim.Success(nil)
+		err2 := stub.PutState(_Txid, requestInfo)
+		if err2 != nil {
+			return shim.Error("error")
+		}
+		return shim.Success([]byte(stub.GetTxID()))
 	}
 	//}
 	return shim.Error("add error")
@@ -109,7 +112,31 @@ func testHistoryQuery(stub shim.ChaincodeStubInterface, args []string) pb.Respon
 	}
 	return shim.Success(jsonAsBytes)
 }
+func testHistoryQuery1(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 
+	currentAssetID := args[0]
+
+	resultsIterator, err := stub.GetHistoryForKey(currentAssetID)
+	if err != nil {
+		return shim.Error("asd")
+	}
+	defer resultsIterator.Close()
+	if !resultsIterator.HasNext() {
+		return shim.Error("asdasd")
+	}
+	var row string
+	for resultsIterator.HasNext() {
+
+		response, err := resultsIterator.Next()
+		if err != nil {
+			return shim.Error(err.Error())
+		}
+		//json.Unmarshal(response.Value, &row)
+		//string(data[:])
+		row += string(response.Value[:]) + ","
+	}
+	return shim.Success([]byte(row))
+}
 func getHistoryListResult(resultsIterator shim.HistoryQueryIteratorInterface) ([]byte, error) {
 
 	defer resultsIterator.Close()

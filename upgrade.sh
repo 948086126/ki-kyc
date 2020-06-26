@@ -9,7 +9,7 @@ GO_CC_SRC_PATH=("github.com/chaincode/sun")
 ## 链码语言
 CC_GOLANG="golang"
 ## 链码版本
-CC_VERSION="3.0"
+CC_VERSION="3.1"
 ## 通道名称
 CHANNEL_NAME="bookchannel"
 
