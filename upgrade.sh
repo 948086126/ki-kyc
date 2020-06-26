@@ -255,7 +255,7 @@ chaincode_upgrade() {
         -e "CORE_PEER_TLS_ROOTCERT_FILE=$(get_peer_tls_cert $org $peer $SERVER_CA)"\
         $CLI_CLIENT \
         peer chaincode upgrade  \
-        -o $ORDERER0_ADDRESS \
+        -o $ORDERER1_ADDRESS \
         --tls true \
         --cafile $ORDERER_CAFILE \
         -C $CHANNEL_NAME \
