@@ -9,7 +9,7 @@ GO_CC_SRC_PATH=("github.com/chaincode/sun")
 ## 链码语言
 CC_GOLANG="golang"
 ## 链码版本
-CC_VERSION="3.1"
+CC_VERSION="3.2"
 ## 通道名称
 CHANNEL_NAME="bookchannel"
 
@@ -270,7 +270,7 @@ chaincode_upgrade() {
         -c '{"Args":[""]}' \
         -P 'OR ('\''Org1MSP.member'\'','\''Org2MSP.member'\'')'
 
-     echo "*******************************init chaincode is successful*********************************"
+     echo "*******************************update chaincode is successful*********************************"
 }
 chaincode_instantiate() {
 
