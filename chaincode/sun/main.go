@@ -25,6 +25,16 @@ type Goods struct {
 	Goods_Remark string `json:"goods_remark"`
 	Create_Time  string `json:"create_time"`
 }
+type Finance struct {
+	Id        string `json:"id"`        //ID
+	Content   string `json:"content"`   //主要内容
+	Accessory string `json:"accessory"` //附件
+}
+
+type FinanceList struct {
+	TxId  string `json:"txid"`  //txid
+	Value []byte `json:"value"` //value
+}
 
 //初始化
 func (g *GoodsChaincode) Init(stub shim.ChaincodeStubInterface) pb.Response {
@@ -74,14 +84,30 @@ func upInfoToBlock(stub shim.ChaincodeStubInterface, args []string) pb.Response 
 }
 func testHistoryQuery(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 
-	key := args[0]
+	currentAssetID := args[0]
+	var HisList []string
 
-	it, err := stub.GetHistoryForKey(key)
+	resultsIterator, err := stub.GetHistoryForKey(currentAssetID)
+	defer resultsIterator.Close()
+	if !resultsIterator.HasNext() {
+		return shim.Error("asdasd")
+	}
+	for resultsIterator.HasNext() {
+		var row string
+		response, err := resultsIterator.Next()
+		if err != nil {
+			return shim.Error(err.Error())
+		}
+		json.Unmarshal(response.Value, &row)
+		HisList = append(HisList, row)
+	}
+
+	jsonAsBytes, err := json.Marshal(HisList)
+
 	if err != nil {
 		return shim.Error(err.Error())
 	}
-	var result, _ = getHistoryListResult(it)
-	return shim.Success(result)
+	return shim.Success(jsonAsBytes)
 }
 
 func getHistoryListResult(resultsIterator shim.HistoryQueryIteratorInterface) ([]byte, error) {

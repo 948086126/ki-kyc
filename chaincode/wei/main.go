@@ -328,6 +328,7 @@ func getHistoryForKeyStrcts(stub shim.ChaincodeStubInterface, queryString string
 			return nil, err
 		}
 		row.TxId = queryResponse.TxId
+
 		row.Value = queryResponse.Value
 		list = append(list, row)
 	}
