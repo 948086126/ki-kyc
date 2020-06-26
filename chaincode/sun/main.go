@@ -56,21 +56,17 @@ func upInfoToBlock(stub shim.ChaincodeStubInterface, args []string) pb.Response 
 	//接收参数,序列化json
 	requestInfo, err2 := json.Marshal(goods)
 	//判断是否存在该id数据
-	state, err := stub.GetState(_Txid)
-	if err != nil {
+	//state, err := stub.GetState(_Txid)
+	/*if err != nil {
 		return shim.Error(err.Error())
+	} else {*/
+	if err2 != nil {
+		return shim.Error(err2.Error())
 	} else {
-		if state != nil {
-			return shim.Error("had same code ,please edit")
-		} else {
-			if err2 != nil {
-				return shim.Error(err.Error())
-			} else {
-				stub.PutState(_Txid, requestInfo)
-				return shim.Success(nil)
-			}
-		}
+		stub.PutState(_Txid, requestInfo)
+		return shim.Success(nil)
 	}
+	//}
 	return shim.Error("add error")
 }
 func delInfoFromBlok(stub shim.ChaincodeStubInterface, args []string) pb.Response {
