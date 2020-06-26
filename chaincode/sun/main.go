@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"github.com/hyperledger/fabric/core/chaincode/shim"
@@ -37,6 +38,8 @@ func (g *GoodsChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 		return upInfoToBlock(stub, args)
 	} else if function == "delInfoFromBlok" {
 		return delInfoFromBlok(stub, args)
+	} else if function == "queryBlock" {
+		return testHistoryQuery(stub, args)
 	}
 	return shim.Error("please check request")
 }
@@ -68,6 +71,43 @@ func upInfoToBlock(stub shim.ChaincodeStubInterface, args []string) pb.Response 
 	}
 	//}
 	return shim.Error("add error")
+}
+func testHistoryQuery(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+
+	key := args[0]
+
+	it, err := stub.GetHistoryForKey(key)
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+	var result, _ = getHistoryListResult(it)
+	return shim.Success(result)
+}
+
+func getHistoryListResult(resultsIterator shim.HistoryQueryIteratorInterface) ([]byte, error) {
+
+	defer resultsIterator.Close()
+	// buffer is a JSON array containing QueryRecords
+	var buffer bytes.Buffer
+	buffer.WriteString("[")
+
+	bArrayMemberAlreadyWritten := false
+	for resultsIterator.HasNext() {
+		queryResponse, err := resultsIterator.Next()
+		if err != nil {
+			return nil, err
+		}
+		// Add a comma before array members, suppress it for the first array member
+		if bArrayMemberAlreadyWritten == true {
+			buffer.WriteString(",")
+		}
+		item, _ := json.Marshal(queryResponse)
+		buffer.Write(item)
+		bArrayMemberAlreadyWritten = true
+	}
+	buffer.WriteString("]")
+	fmt.Printf("queryResult:\n%s\n", buffer.String())
+	return buffer.Bytes(), nil
 }
 func delInfoFromBlok(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	_Txid := args[0]
